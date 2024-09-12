@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление задачами</title>
+    <style>
+        /* Стили для вкладок */
+        .tab-container {
+            display: flex;
+            cursor: po<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление задачами</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Управление задачами</h1>
+    
+    <!-- Форма для добавления задачи -->
+    <h2>Добавить задачу</h2>
+    <form action="{{ url_for('add_task') }}" method="post">
+        <input type="text" name="task" placeholder="Описание задачи" required>
+        <button type="submit">Добавить задачу</button>
+    </form>
+
+    <!-- Форма для добавления отчета -->
+    <h2>Добавить отчет</h2>
+    <form action="{{ url_for('add_report') }}" method="post">
+        <input type="text" name="report" placeholder="Описание отчета" required>
+        <button type="submit">Добавить отчет</button>
+    </form>
+
+    <!-- Форма для добавления отсутствия -->
+    <h2>Добавить отсутствие</h2>
+    <form action="{{ url_for('add_absence') }}" method="post">
+        <input type="text" name="employee" placeholder="ФИО сотрудника" required>
+        <select name="type_absence" required>
+            <option value="S">Отсутствие по уважительной причине</option>
+            <option value="B">Больничный</option>
+            <option value="O">Отпуск</option>
+            <option value="K">Командировка</option>
+        </select>
+        <input type="date" name="start_date" placeholder="Дата начала" required>
+        <input type="date" name="end_date" placeholder="Дата окончания" required>
+        <button type="submit">Добавить отсутствие</button>
+    </form>
+
+    <!-- Форма для добавления договора -->
+    <h2>Добавить договор</h2>
+    <form action="{{ url_for('add_contract') }}" method="post">
+        <input type="text" name="contract_name" placeholder="Название договора" required>
+        <input type="date" name="end_date" placeholder="Дата окончания" required>
+        <button type="submit">Добавить договор</button>
+    </form>
+
+    <!-- Список задач -->
+    <h2>Список задач</h2>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task }} <a href="{{ url_for('complete_task', task_id=loop.index0) }}">Завершить</a> <a href="{{ url_for('delete_task', task_id=loop.index0) }}">Удалить</a></li>
+        {% endfor %}
+    </ul>
+
+    <!-- Список отчетов -->
+    <h2>Список отчетов</h2>
+    <ul>
+        {% for report in reports %}
+            <li>{{ report }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Список отсутствий -->
+    <h2>Список отсутствий</h2>
+    <ul>
+        {% for absence in absences %}
+            <li>{{
+inter;
+            padding: 10px;
+            background-color: #f1f1f1;
+        }
+        .tab {
+            padding: 10px;
+            margin: 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #ddd;
+            flex: 1;
+            text-align: center;
+        }
+        .tab.active {
+            background-color: #ffffff;
+            border-bottom: none;
+        }
+        .tab-content {
+            display: none;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .alert {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tabs = document.querySelectorAll('.tab-container .tab');
+            var contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    var target = this.getAttribute('data-target');
+                    
+                    tabs.forEach(function(t) {
+                        t.classList.remove('active');
+                    });
+                    contents.forEach(function(c) {
+                        c.classList.remove('active');
+                    });
+                    
+                    document.querySelector('[data-content="' + target + '"]').classList.add('active');
+                    this.classList.add('active');
+                });
+            });
+            
+            // Изначально показываем первую вкладку
+            if (tabs.length > 0) {
+                tabs[0].click();
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>Управление задачами</h1>
+    
+    <div class="tab-container">
+        <div class="tab active" data-target="tasks">Задачи</div>
+        <div class="tab" data-target="reports">Отчеты</div>
+        <div class="tab" data-target="absences">Отсутствия</div>
+        <div class="tab" data-target="contracts">Договоры</div>
+        <div class="tab" data-target="email">Отправить Email</div>
+        <div class="tab" data-target="upload">Загрузить табель из Excel</div>
+    </div>
+    
+    <div class="tab-content active" data-content="tasks">
+        <h2>Добавить задачу</h2>
+        <form action="{{ url_for('add_task') }}" method="post">
+            <input type="text" name="task" placeholder="Введите задачу" required>
+            <button type="submit">Добавить</button>
+        </form>
+        <h2>Задачи</h2>
+        <ul>
+            {% for task in tasks %}
+            <li>
+                {{ task }}
+                <a href="{{ url_for('complete_task', task_id=loop.index0) }}">Выполнена</a> |
+                <a href="{{ url_for('delete_task', task_id=loop.index0) }}">Удалить</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="tab-content" data-content="reports">
+        <h2>Добавить отчет</h2>
+        <form action="{{ url_for('add_report') }}" method="post">
+            <input type="text" name="report" placeholder="Введите отчет" required>
+            <button type="submit">Добавить</button>
+        </form>
+        <h2>Отчеты</h2>
+        <ul>
+            {% for report in reports %}
+            <li>{{ report }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="tab-content" data-content="absences">
+        <h2>Добавить отсутствие</h2>
+        <form action="{{ url_for('add_absence') }}" method="post">
+            <input type="text" name="employee" placeholder="Сотрудник" required>
+            <input type="text" name="type_absence" placeholder="Тип отсутствия" required>
+            <input type="date" name="start_date" required>
+            <input type="date" name="end_date" required>
+            <button type="submit">Добавить</button>
+        </form>
+        <h2>Отсутствия</h2>
+        <ul>
+            {% for absence in absences %}
+            <li>{{ absence }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="tab-content" data-content="contracts">
+        <h2>Добавить договор</h2>
+        <form action="{{ url_for('add_contract') }}" method="post">
+            <input type="text" name="contract_name" placeholder="Название договора" required>
+            <input type="date" name="start_date" required>
+            <input type="date" name="end_date" required>
+            <button type="submit">Добавить</button>
+        </form>
+        <h2>Договоры</h2>
+        <ul>
+            {% for contract in contracts %}
+            <li>
+                {{ contract }}
+                {% if 'дедлайн' in contract %}
+                <span class="alert">Предупреждение: срок истекает!</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="tab-content" data-content="email">
+        <h2>Отправить Email</h2>
+        <form action="{{ url_for('send_email') }}" method="post">
+            <input type="email" name="email" placeholder="Email получателя" required>
+            <input type="text" name="subject" placeholder="Тема" required>
+            <textarea name="body" placeholder="Сообщение" required></textarea>
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+    
+    <div class="tab-content" data-content="upload">
+        <h2>Загрузить табель из Excel</h2>
+        <form action="{{ url_for('upload_timesheet') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".xlsx" required>
+            <button type="submit">Загрузить</button>
+        </form>
+    </div>
+</body>
+</html>

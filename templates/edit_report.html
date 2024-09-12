@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование отчета</title>
+</head>
+<body>
+    <h1>Редактирование отчета</h1>
+    <form action="{{ url_for('edit_report', report_id=report_id) }}" method="post">
+        <input type="text" name="report" value="{{ report }}" required>
+        <button type="submit">Сохранить</button>
+    </form>
+    <a href="{{ url_for('index') }}">Назад</a>
+</body>
+</html>
